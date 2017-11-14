@@ -72,6 +72,16 @@ open class ActionCableClient {
     open var isConnected : Bool { return socket.isConnected }
     open var url: Foundation.URL { return socket.currentURL }
   
+    open var headers : [String: String] {
+        get { return socket.headers }
+        set { socket.headers = newValue }
+    }
+    
+    open var origin : String? {
+        get { return socket.origin }
+        set { socket.origin = newValue }
+    }
+    
     /// Initialize an ActionCableClient.
     ///
     /// Each client represents one connection to the server.
