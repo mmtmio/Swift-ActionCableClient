@@ -71,16 +71,6 @@ open class ActionCableClient {
     //MARK: Properties
     open var isConnected : Bool { return socket.isConnected }
     open var url: Foundation.URL { return socket.currentURL }
-  
-    open var headers : [String: String] {
-        get { return socket.headers }
-        set { socket.headers = newValue }
-    }
-    
-    open var origin : String? {
-        get { return socket.origin }
-        set { socket.origin = newValue }
-    }
     
     /// Initialize an ActionCableClient.
     ///
@@ -91,20 +81,20 @@ open class ActionCableClient {
     ///  ```swift
     ///  let client = ActionCableClient(URL: NSURL(string: "ws://localhost:3000/cable")!)
     ///  ```
-    public required init(url: URL, headers: [String: String]? = nil, origin : String? = nil) {
-        /// Setup Initialize Socket
+    public required init(url: URL, headers: [String]? = nil, origin : String? = nil) {
+        /// Setup Initialize Socket - MD HEAVILY TAMPERED HERE 14 NOV
         var request = URLRequest(url: url)
+        let authString = "Token token=\(headers?[0] ?? "nil"), email=\(headers?[1] ?? "nil")"
         
         if let origin = origin {
             request.setValue(origin, forHTTPHeaderField: "Origin")
-        }
-        
-        for (field, value) in headers ?? [:] {
-            request.setValue(value, forHTTPHeaderField: field)
+            request.setValue(authString, forHTTPHeaderField: "Authorization")
         }
         
         socket = WebSocket(request: request)
-        setupWebSocket()
+        if headers?[0].isEmpty ?? true {
+            setupWebSocket()
+        }
     }
     
     /// Connect with the server
