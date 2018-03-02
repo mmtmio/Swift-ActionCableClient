@@ -93,6 +93,9 @@ open class ActionCableClient {
         
         socket = WebSocket(request: request)
         if headers?[0].isEmpty ?? true {
+            print("no headers present - dont connect to onsite")
+        } else {
+            print("headers present - connect to onsite")
             setupWebSocket()
         }
     }
